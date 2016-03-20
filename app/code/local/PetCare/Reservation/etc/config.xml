@@ -14,13 +14,13 @@
                     <!--<frontName>reservation</frontName>-->
                 <!--</args>-->
             <!--</reservation>-->
-            <reservation>
+            <checkout>
                 <args>
                     <modules>
-                        <reservation before="Mage_Checkout_CartController">PetCare_Reservation</reservation>
+                        <PetCare_Reservation before="Mage_Checkout">PetCare_Reservation</PetCare_Reservation>
                     </modules>
                 </args>
-            </reservation>
+            </checkout>
         </routers>
     </frontend>
     <global>
@@ -37,8 +37,15 @@
                     </reservation>
                 </entities>
             </reservation_resource>
-
         </models>
+        <resources>
+            <reservation_setup>
+                <setup>
+                    <module>PetCare_Reservation</module>
+                    <class>PetCare_Reservation_Model_Resource_Setup</class>
+                </setup>
+            </reservation_setup>
+        </resources>
     </global>
 
 </config>
