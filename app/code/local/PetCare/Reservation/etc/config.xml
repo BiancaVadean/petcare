@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <PetCare_Reservation>
+            <version>0.1.0</version>    <!-- Version number of your module -->
+        </PetCare_Reservation>
+    </modules>
+    <frontend>
+        <routers>
+            <!--<reservation>-->
+                <!--<use>standard</use>-->
+                <!--<args>-->
+                    <!--<module>PetCare_Reservation</module>-->
+                    <!--<frontName>reservation</frontName>-->
+                <!--</args>-->
+            <!--</reservation>-->
+            <reservation>
+                <args>
+                    <modules>
+                        <reservation before="Mage_Checkout_CartController">PetCare_Reservation</reservation>
+                    </modules>
+                </args>
+            </reservation>
+        </routers>
+    </frontend>
+    <global>
+        <models>
+            <reservation>
+                <class>PetCare_Reservation_Model</class>
+                <resourceModel>reservation_resource</resourceModel>
+            </reservation>
+            <reservation_resource>
+                <class>PetCare_Reservation_Model_Resource</class>
+                <entities>
+                    <reservation>
+                        <table>petcare_reservations</table>
+                    </reservation>
+                </entities>
+            </reservation_resource>
+
+        </models>
+    </global>
+
+</config>
