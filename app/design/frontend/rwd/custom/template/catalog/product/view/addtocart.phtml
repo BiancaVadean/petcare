@@ -30,7 +30,7 @@
     <div class="add-to-cart">
         <?php if(!$_product->isGrouped()): ?>
         <div class="qty-wrapper">
-            <?php if(($_product->isVirtual()) && (in_array(3, $_product->getCategoryIds()))): ?>
+            <?php if(($_product->isVirtual()) && (in_array(5, $_product->getCategoryIds()))): ?>
                 <label for="start_date"><?php echo $this->__('Arrival date:') ?></label>
                 <input type="date" name="start_date" id="start_date" value="<?php echo date('Y-m-d');?>" class="required-entry validate-date validate-date-range date-range-date-from" min="<?php echo date('Y-m-d');?>" onkeydown="return false"></br>
                 <label for="end_date"><?php echo $this->__('Pickup date:') ?></label>

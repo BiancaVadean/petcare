@@ -4,7 +4,7 @@ require_once 'Mage/Checkout/controllers/CartController.php';
 
 class PetCare_Reservation_CartController extends Mage_Checkout_CartController
 {
-    const RESERVATION_CATEGORY_ID = 3;
+    const RESERVATION_CATEGORY_ID = 5;
     public function addAction ()
     {
         if($this->_initProduct()->isVirtual() && $this->isReservation($this->_initProduct())) {
