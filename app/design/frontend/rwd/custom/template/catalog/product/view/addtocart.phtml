@@ -30,12 +30,12 @@
     <div class="add-to-cart">
         <?php if(!$_product->isGrouped()): ?>
         <div class="qty-wrapper">
-            <?php if($_product->isVirtual()): ?>
+            <?php if(($_product->isVirtual()) && (in_array(3, $_product->getCategoryIds()))): ?>
                 <label for="start_date"><?php echo $this->__('Arrival date:') ?></label>
-                <input type="date" name="start_date" id="start_date" value="<?php echo date('Y-m-d');?>" class="required" min="<?php echo date('Y-m-d');?>"></br>
+                <input type="date" name="start_date" id="start_date" value="<?php echo date('Y-m-d');?>" class="required-entry validate-date validate-date-range date-range-date-from" min="<?php echo date('Y-m-d');?>" onkeydown="return false"></br>
                 <label for="end_date"><?php echo $this->__('Pickup date:') ?></label>
-                <input type="date" name="end_date" id="end_date" value="<?php echo date('Y-m-d', strtotime("tomorrow"));?>" class="required" min="<?php echo date('Y-m-d', strtotime("tomorrow"));?>"></br>
-             <?php else:?>
+                <input type="date" name="end_date" id="end_date" value="<?php echo date('Y-m-d', strtotime("tomorrow"));?>" class="required-entry validate-date validate-date-range date-range-date-to" min="<?php echo date('Y-m-d', strtotime("tomorrow"));?>"></br>
+             <?php else: ?>
                 <label for="qty"><?php echo $this->__('Qty:') ?></label>
                 <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
             <?php endif; ?>
@@ -47,3 +47,10 @@
         </div>
     </div>
 <?php endif; ?>
+<script type="text/javascript" src="js/lib/jquery/jquery-1.10.2.min.js"></script>
+<script>
+    window.onload= function () {
+        var disabled = <?php  echo json_encode(Mage::getModel('reservation/reservation')->nextReservedDates());?>;
+        console.log(disabled);
+    }
+</script>

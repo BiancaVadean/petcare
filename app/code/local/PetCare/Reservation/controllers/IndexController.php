@@ -4,7 +4,6 @@ class PetCare_Reservation_IndexController extends Mage_Core_Controller_Front_Act
 {
     public function indexAction()
     {
-        var_dump(Mage::getModel('reservation/reservation')->getCollection());
-        echo "Evrika!";
+        // test model
     }
 }

@@ -7,13 +7,13 @@
     </modules>
     <frontend>
         <routers>
-            <!--<reservation>-->
-                <!--<use>standard</use>-->
-                <!--<args>-->
-                    <!--<module>PetCare_Reservation</module>-->
-                    <!--<frontName>reservation</frontName>-->
-                <!--</args>-->
-            <!--</reservation>-->
+            <reservation>
+                <use>standard</use>
+                <args>
+                    <module>PetCare_Reservation</module>
+                    <frontName>reservation</frontName>
+                </args>
+            </reservation>
             <checkout>
                 <args>
                     <modules>
