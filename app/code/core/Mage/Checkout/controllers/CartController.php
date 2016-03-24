@@ -205,6 +205,13 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             }
 
             $product = $this->_initProduct();
+            // Here
+            $interval = ['start_date' => $params['start_date'],
+                'end_date' => $params['end_date']];
+            $product->addCustomOption('additional_options', serialize($interval));
+            $custom = $product->getCustomOption('additional_options')->getValue();
+// TO HERE
+
             $related = $this->getRequest()->getParam('related_product');
 
             /**
@@ -216,6 +223,8 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             }
 
             $cart->addProduct($product, $params);
+
+//            die(var_dump($cart->getQuote()->getInterval()));
             if (!empty($related)) {
                 $cart->addProductsByIds(explode(',', $related));
             }

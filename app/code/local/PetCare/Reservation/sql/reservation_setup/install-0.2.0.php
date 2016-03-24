@@ -36,7 +36,21 @@ $table = $installer->getConnection()->newTable($installer->getTable('reservation
         'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE,
         Varien_Db_Ddl_Table::ACTION_CASCADE
-        );
+        )
+    ->addForeignKey($installer->getFkName('reservation/reservation', 'customer_id', 'customer/entity', 'entity_id'),
+        'customer_id',
+        $installer->getTable('customer/entity'),
+        'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE,
+        Varien_Db_Ddl_Table::ACTION_CASCADE
+    )
+    ->addForeignKey($installer->getFkName('reservation/reservation', 'order_item_id', 'sales/order_item', 'item_id'),
+        'order_item_id',
+        $installer->getTable('sales/order_item'),
+        'item_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE,
+        Varien_Db_Ddl_Table::ACTION_CASCADE
+    );
 
 $installer->getConnection()->createTable($table);
 $installer->endSetup();

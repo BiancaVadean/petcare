@@ -24,6 +24,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<link rel="stylesheet" href="../skin/frontend/rwd/custom/css/jquery-ui.css">
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = Mage::helper('core')->quoteEscape($this->__('Add to Cart')); ?>
 <?php if($_product->isSaleable()): ?>
@@ -32,12 +33,14 @@
         <div class="qty-wrapper">
             <?php if(($_product->isVirtual()) && (in_array(5, $_product->getCategoryIds()))): ?>
                 <label for="start_date"><?php echo $this->__('Arrival date:') ?></label>
-                <input type="date" name="start_date" id="start_date" value="<?php echo date('Y-m-d');?>" class="required-entry validate-date validate-date-range date-range-date-from" min="<?php echo date('Y-m-d');?>" onkeydown="return false"></br>
+                <input type="text" name="start_date" id="start_date"  readonly="true" class="reservation-date required-entry validate-date validate-date-range date-range-date-from" min="<?php echo date('Y-m-d');?>" onkeydown="return false"></br>
                 <label for="end_date"><?php echo $this->__('Pickup date:') ?></label>
-                <input type="date" name="end_date" id="end_date" value="<?php echo date('Y-m-d', strtotime("tomorrow"));?>" class="required-entry validate-date validate-date-range date-range-date-to" min="<?php echo date('Y-m-d', strtotime("tomorrow"));?>"></br>
+                <input type="text" name="end_date" id="end_date" readonly="true" class="required-entry validate-date validate-date-range date-range-date-to" min="<?php echo date('Y-m-d', strtotime("tomorrow"));?>"></br>
+                <input style="display: none" type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="1" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
              <?php else: ?>
                 <label for="qty"><?php echo $this->__('Qty:') ?></label>
-                <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
+                <input  type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Qty')) ?>" class="input-text qty" />
+
             <?php endif; ?>
         </div>
         <?php endif; ?>
@@ -47,10 +50,90 @@
         </div>
     </div>
 <?php endif; ?>
-<script type="text/javascript" src="js/lib/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/lib/jquery/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/lib/jquery/jquery-ui.js"></script>
 <script>
+    var $x = jQuery.noConflict();
     window.onload= function () {
-        var disabled = <?php  echo json_encode(Mage::getModel('reservation/reservation')->nextReservedDates());?>;
-        console.log(disabled);
+        var startDates = <?php  echo json_encode(Mage::getModel('reservation/reservation')->nextReservedDates('start'));?>;
+        var endDates = <?php  echo json_encode(Mage::getModel('reservation/reservation')->nextReservedDates('end'));?>;
+        console.log(startDates);
+        console.log(endDates);
+        jQuery(function() {
+            jQuery( "#start_date" ).datepicker({
+                currentText: "Now",
+                dateFormat: "yy-mm-dd",
+                minDate: new Date(),
+                defaultDate: "<?php echo date('Y-m-d');?>",
+                beforeShowDay: disableStartDates,
+                onSelect: setEnd
+
+            });
+            jQuery( "#end_date" ).datepicker({
+                currentText: "Tomorrow",
+                dateFormat: "yy-mm-dd",
+                minDate: 1,
+                beforeShowDay: disableEndDates,
+                onSelect: total
+            });
+        });
+        function disableStartDates(date) {
+
+            var m = date.getMonth();
+            var d = date.getDate();
+            var y = date.getFullYear();
+            var currentdate = y + '-' + ('0' + (m + 1)).slice(-2) +'-' + ('0' + d).slice(-2);
+
+            for (var i = 0; i < startDates.length; i++) {
+                if (jQuery.inArray(currentdate, startDates) != -1 ) {
+                    return [false];
+                }
+                return [true];
+            }
+        }
+
+        function disableEndDates(date) {
+            var m = date.getMonth();
+            var d = date.getDate();
+            var y = date.getFullYear();
+
+            var currentdate = y + '-' + ('0' + (m + 1)).slice(-2) +'-' + ('0' + d).slice(-2);
+            for (var i = 0; i < endDates.length; i++) {
+                if (jQuery.inArray(currentdate, endDates) != -1 ) {
+                    return [false];
+                }
+                return [true];
+            }
+        }
+
+        function setEnd (selected, datepicker) {
+            var selectedDate = new Date(selected);
+            var date = new Date();
+            date.setDate(selectedDate.getDate() + 1);
+            var m = date.getMonth();
+            var d = date.getDate();
+            var y = date.getFullYear();
+            var minDate = y + '-' + ('0' + (m + 1)).slice(-2) +'-' + ('0' + d).slice(-2);
+            jQuery( "#end_date" ).datepicker('refresh');
+            jQuery( "#end_date" ).val('');
+            jQuery( "#end_date" ).datepicker('option', 'minDate', minDate);
+        }
+
+        function total ()
+        {
+            var start = jQuery( "#start_date" ).datepicker('getDate');
+            var end = jQuery( "#end_date" ).datepicker('getDate');
+            var qty = getInterval(start, end);
+            jQuery('#qty').val(qty);
+            console.log(qty);
+        }
+        function getInterval(start, end) {
+            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+            var firstDate = new Date(start);
+            var secondDate = new Date(end);
+
+            var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+            return diffDays;
+        }
     }
 </script>

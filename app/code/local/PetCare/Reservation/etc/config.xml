@@ -2,7 +2,7 @@
 <config>
     <modules>
         <PetCare_Reservation>
-            <version>0.1.0</version>    <!-- Version number of your module -->
+            <version>0.2.0</version>    <!-- Version number of your module -->
         </PetCare_Reservation>
     </modules>
     <frontend>
@@ -46,6 +46,16 @@
                 </setup>
             </reservation_setup>
         </resources>
+        <events>
+            <sales_order_place_before>
+                <observers>
+                    <petcare_reservation_model_observer>
+                        <class>PetCare_Reservation_Model_Observer</class>
+                        <method>saveCustomOptions</method>
+                    </petcare_reservation_model_observer>
+                </observers>
+            </sales_order_place_before>
+        </events>
     </global>
 
 </config>

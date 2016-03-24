@@ -72,14 +72,17 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 
         <?php if ($_options = $this->getOptionList()):?>
         <dl class="item-options">
+            <div> Reservation dates:</div>
             <?php foreach ($_options as $_option) : ?>
+
             <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-                <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                <dt><?php ?><!--</dt>-->
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                 <div class="truncated_full_value">
                     <dl class="item-options">
-                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                        <dt><?php
+//                            $this->escapeHtml($_option['label']) ?><!--</dt>-->
                         <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                     </dl>
                 </div>
@@ -205,10 +208,11 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
         <?php endif; ?>
     <?php endif; ?>
     <td class="product-cart-actions" data-rwd-label="<?php echo $this->__('Qty'); ?>">
-        <?php if($_item->getProduct()->isVirtual()): ?>
-            <?php echo  "Category id: " . $_item->getProduct()->getCategoryId(); var_dump($_item->getProduct()->getCategoryIds());?>
-            <input type="date" name="start_date" id="start_date" value="<?php echo date('Y-m-d');?>" class="required" min="<?php echo date('Y-m-d');?>"></br>
-            <input type="date" name="end_date" id="end_date" value="<?php echo date('Y-m-d', strtotime("tomorrow"));?>" class="required" min="<?php echo date('Y-m-d', strtotime("tomorrow"));?>"></br>
+        <?php if($_item->getProduct()->isVirtual() && in_array(5, $_item->getProduct()->getCategoryIds())): ?>
+            <?php $op = unserialize($_item->getProduct()->getCustomOption('additional_options')->getValue()); ?>
+<!--            <input type="date" name="start_date" id="start_date" value="--><?php //echo date('Y-m-d');?><!--" class="required" min="--><?php //echo date('Y-m-d');?><!--"></br>-->
+<!--            <input type="date" name="end_date" id="end_date" value="--><?php //echo date('Y-m-d', strtotime("tomorrow"));?><!--" class="required" min="--><?php //echo date('Y-m-d', strtotime("tomorrow"));?><!--"></br>-->
+            <div>Reservation</div>
         <?php else: ?>
         <input type="text" pattern="\d*" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4"
                data-cart-item-id="<?php echo $this->jsQuoteEscape($_item->getSku()) ?>"

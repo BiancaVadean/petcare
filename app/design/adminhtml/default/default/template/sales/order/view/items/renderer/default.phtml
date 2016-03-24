@@ -32,7 +32,17 @@
         <div id="<?php echo $this->getHtmlId() ?>" class="item-container">
         <?php endif; ?>
         <div class="item-text">
-            <?php echo $this->getColumnHtml($_item, 'name') ?>
+            <?php
+            if ($_item->getProduct()->isVirtual() && in_array(5, $_item->getProduct()->getCategoryIds())) {
+                $options = $_item->getProductOptions();
+                echo $this->getColumnHtml($_item, 'name')  .  "Arrival date: " . $options['info_buyRequest']['start_date']
+                . "</br> Pickup date: " . $options['info_buyRequest']['end_date'];
+            } else {
+
+
+                echo $this->getColumnHtml($_item, 'name'); 
+            }
+            ?>
         </div>
         <?php if ($this->canDisplayContainer()): ?>
         </div>

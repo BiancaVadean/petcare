@@ -247,7 +247,6 @@ class Mage_Checkout_Model_Cart extends Varien_Object implements Mage_Checkout_Mo
     {
         $product = $this->_getProduct($productInfo);
         $request = $this->_getProductRequest($requestInfo);
-
         $productId = $product->getId();
 
         if ($product->getStockItem()) {
