@@ -78,7 +78,6 @@
             });
         });
         function disableStartDates(date) {
-
             var m = date.getMonth();
             var d = date.getDate();
             var y = date.getFullYear();
@@ -90,6 +89,7 @@
                 }
                 return [true];
             }
+            return [true];
         }
 
         function disableEndDates(date) {
@@ -104,6 +104,7 @@
                 }
                 return [true];
             }
+            return [true];
         }
 
         function setEnd (selected, datepicker) {
